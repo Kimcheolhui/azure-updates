@@ -90,7 +90,10 @@ class DatabaseManager:
             # Update already exists, return its ID
             cursor.execute("SELECT id FROM updates WHERE guid = ?", (guid,))
             result = cursor.fetchone()
-            return result[0] if result else None
+            if result:
+                return result[0]
+            # This should not happen, but handle gracefully
+            return None
     
     def get_or_create_category(self, name: str, category_type: str = 'other') -> int:
         """

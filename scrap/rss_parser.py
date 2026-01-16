@@ -60,9 +60,9 @@ class AzureRSSParser:
             Datetime object or None if parsing fails
         """
         try:
-            # feedparser provides parsed date as struct_time
-            return datetime(*feedparser._parse_date(date_string)[:6])
-        except:
+            from email.utils import parsedate_to_datetime
+            return parsedate_to_datetime(date_string)
+        except (ValueError, TypeError, AttributeError):
             # Fallback to current time if parsing fails
             return datetime.now()
     
@@ -161,7 +161,9 @@ class AzureRSSParser:
             return True
             
         except Exception as e:
-            print(f"Error parsing entry: {e}")
+            entry_id = entry.get('id', entry.get('guid', 'unknown'))
+            entry_title = entry.get('title', 'untitled')[:50]
+            print(f"Error parsing entry {entry_id} ('{entry_title}...'): {e}")
             return False
     
     def crawl_and_store(self) -> int:
