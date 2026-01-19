@@ -35,7 +35,7 @@ azure-updates/
 
 ### Prerequisites
 
-- Python 3.7 or higher
+- Python 3.9 or higher
 - pip (Python package manager)
 
 ### Installation
